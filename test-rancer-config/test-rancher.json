@@ -1,0 +1,117 @@
+{
+    "clustertype": "rke2",
+    "providertype": "Rancher",
+    "description": "test-rancher-cluster",
+    "name": "demo-app-template",
+    "version": "v0.1.0",
+    "clusterconfiguration": {
+        "rke2": {
+            "apiVersion": "provisioning.cattle.io/v1",
+            "kind": "Cluster",
+            "metadata": {
+                "finalizers": [
+                    "wrangler.cattle.io/cloud-config-secret-remover",
+                    "wrangler.cattle.io/provisioning-cluster-remove",
+                    "wrangler.cattle.io/rke-cluster-remove"
+                ],
+                "labels": {
+                    "cpumanager": "true"
+                },
+                "generation": 2,
+                "managedFields": null,
+                "name": "test-rancher-cluster",
+                "namespace": "fleet-default"
+            },
+            "spec": {
+                "kubernetesVersion": "v1.26.2+rke2r1",
+                "localClusterAuthEndpoint": {},
+                "rkeConfig": {
+                    "chartValues": {
+                        "rke2-calico": {}
+                    },
+                    "etcd": {
+                        "snapshotRetention": 5,
+                        "snapshotScheduleCron": "0 */5 * * *"
+                    },
+                    "machineGlobalConfig": {
+                        "cni": "multus,calico",
+                        "disable-kube-proxy": false,
+                        "etcd-expose-metrics": false,
+                        "kube-apiserver-arg": [
+                            "feature-gates=DownwardAPIHugePages=true"
+                        ],
+                        "profile": null
+                    },
+                    "machineSelectorConfig": [],
+                    "registries": {},
+                    "upgradeStrategy": {
+                        "controlPlaneConcurrency": "1",
+                        "controlPlaneDrainOptions": {
+                            "deleteEmptyDirData": true,
+                            "disableEviction": false,
+                            "enabled": false,
+                            "force": false,
+                            "gracePeriod": -1,
+                            "ignoreDaemonSets": true,
+                            "postDrainHooks": null,
+                            "preDrainHooks": null,
+                            "skipWaitForDeleteTimeoutSeconds": 0,
+                            "timeout": 120
+                        },
+                        "workerConcurrency": "1",
+                        "workerDrainOptions": {
+                            "deleteEmptyDirData": true,
+                            "disableEviction": false,
+                            "enabled": false,
+                            "force": false,
+                            "gracePeriod": -1,
+                            "ignoreDaemonSets": true,
+                            "postDrainHooks": null,
+                            "preDrainHooks": null,
+                            "skipWaitForDeleteTimeoutSeconds": 0,
+                            "timeout": 120
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "extensions": [
+        {
+            "apiVersion": "v1",
+            "kind": "Namespace",
+            "metadata": {
+                "name": "observability",
+                "labels": {
+                    "name": "observability"
+                }
+            }
+        },
+        {
+            "apiVersion": "helm.cattle.io/v1",
+            "kind": "HelmChart",
+            "metadata": {
+                "name": "node-exporter",
+                "namespace": "kube-system"
+            },
+            "spec": {
+                "chart": "node-exporter",
+                "version": "2.4.1",
+                "targetNamespace": "observability",
+            }
+        },
+        {
+            "apiVersion": "helm.cattle.io/v1",
+            "kind": "HelmChart",
+            "metadata": {
+                "name": "prometheus",
+                "namespace": "kube-system"
+            },
+            "spec": {
+                "chart": "prometheus",
+                "version": "33.1.0",
+                "targetNamespace": "observability",
+            }
+        }
+    ]   
+}
