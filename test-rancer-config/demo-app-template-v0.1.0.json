@@ -2,7 +2,7 @@
 	"clustertype": "rke2",
 	"providertype": "Rancher",
 	"description": "test-rancher-cluster",
-	"name": "test-rancher-cluster",
+	"name": "demo-app-template",
 	"version": "v0.1.0",
 	"clusterconfiguration": {
 		"rke2": {
