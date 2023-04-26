@@ -6,3 +6,11 @@ helm:
   version: 1.11.0
   valuesFiles:
     - values.yaml
+targetCustomizations:
+  - name: test1
+    clusterName: test-multiple-bundles-1
+    helm:
+      values:
+        proxy:
+          httpProxy: http://testproxyoverride.com:911
+          httpsProxy: http://testproxyoverride.com:912
