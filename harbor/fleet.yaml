@@ -14,3 +14,10 @@ targetCustomizations:
         proxy:
           httpProxy: http://testproxyoverride.com:911
           httpsProxy: http://testproxyoverride.com:912
+  - name: test2
+    clusterName: test-multiple-bundles-2
+    helm:
+      values:
+        proxy:
+          httpProxy: http://testproxyoverride2.com:911
+          httpsProxy: http://testproxyoverride2.com:912
