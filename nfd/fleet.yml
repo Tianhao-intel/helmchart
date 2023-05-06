@@ -6,3 +6,4 @@ helm:
   chart: node-feature-discovery
   values:
     installCRDs: true
+    templatedLabel: "${ .ClusterLabels.deviceid }"
